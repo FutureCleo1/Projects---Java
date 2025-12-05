@@ -1,4 +1,4 @@
-package src.Projects;
+package Projects;
 public class raceResults {
     private String raceName;
     private String location;

@@ -1,4 +1,4 @@
-package src.Projects;
+package Projects;
 
 public class Driver implements Comparable<Driver>{
     private String driverName;

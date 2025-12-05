@@ -1,8 +1,8 @@
-package src.Projects;
+package Projects;
 
 import java.io.IOException;
 import java.util.Scanner;
-import src.Projects.manageRace;
+import Projects.manageRace;
 
 public class Main {
     public static void main(String[] args) {
@@ -40,7 +40,9 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("\nTeams Information:");
-                    seasonResults.getSortedTeams();
+                    for (Team t : seasonResults.getSortedTeams()) {
+                        System.out.println(t);
+                    }
                     break;
                 case 3:
                     System.out.print("Race Name: ");

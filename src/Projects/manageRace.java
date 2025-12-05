@@ -1,4 +1,4 @@
-package src.Projects;
+package Projects;
 
 import java.io.*;
 import java.util.*;
