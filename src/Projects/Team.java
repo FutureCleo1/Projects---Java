@@ -20,7 +20,7 @@ public class Team {
         this.principal = principal;
         this.location = location;
         this.championships = championships;
-        this.totalPoints = 0;
+        this.totalPoints = totalPoints;
         this.drivers = new ArrayList<>();
     }
     /************************************************************************

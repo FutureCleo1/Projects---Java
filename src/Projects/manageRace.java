@@ -67,7 +67,16 @@ public class manageRace {
         list.sort(null);
         return list.subList(0, Math.min(num, list.size()));
     } 
-
+    /******************************************************************************************************
+    Name: getSortedTeams
+    Parameter: none
+    Purpose: returns a list of teams sorted by total points
+    *******************************************************************************************************/
+    public List<Team> getSortedTeams() {
+        List<Team> list = new ArrayList<>(teams.values());
+        list.sort((c, w) -> w.getTotalPoints() - c.getTotalPoints());
+        return list;
+    }
     /******************************************************************************************************
     Name: addRaceResults
     Parameter: raceResults
@@ -78,26 +87,59 @@ public class manageRace {
         rr.addPointsEarned(); // applies points to driver/team
     }
     /******************************************************************************************************
-    Name: getListTeams
-    Parameter: none
-    Purpose: returns a list of all teams
+    Name: recordedRace
+    Parameter: raceName, location, date, driver, team, position, pointsEarned
+    Purpose: creates a race result and adds it to the list of results
     *******************************************************************************************************/
-    public List<Team> getListTeams() {
-        return new ArrayList<>(teams.values());
+    public void recordedRace(String raceName, String location, String date, Driver driver, Team team, int position, int pointsEarned) {
+        Driver d = getDriver(driver.getDriverName());
+        Team t = getTeam(team.getTeamName());
+        raceResults rr = new raceResults(raceName, location, date, d, t, position, pointsEarned);
+        addRaceResults(rr);
     }
     /******************************************************************************************************
-    Name: pollStanding
-    Parameter: none
-    Purpose: prints the current standings for drivers and teams
+    Name: getRaceWinner
+    Parameter: raceName
+    Purpose: returns the winner of a specific race
     *******************************************************************************************************/
-    public void pollStanding() {
+    public raceResults getRaceWinner(String raceName) {
+        return results.stream()
+                .filter(r -> r.getRaceName().equals(raceName) && r.isWinner())
+                .findFirst()
+                .orElse(null);
+    }
+    /******************************************************************************************************
+    Name: getPodium
+    Parameter: raceName
+    Purpose: returns the top 3 finishers of a specific race 
+    *******************************************************************************************************/
+    public List<raceResults> getPodium(String raceName) {
+        List<raceResults> podium = new ArrayList<>();
+        for (raceResults r : results) {
+            if (r.getRaceName().equals(raceName) && r.isTopPodium()) {
+                podium.add(r);
+            }
+        }
+        podium.sort(Comparator.comparingInt(raceResults::getPosition));
+        return podium;
+    }
+    /******************************************************************************************************
+    Name: seasonSummary
+    Parameter: none
+    Purpose: prints a summary of the season including race results and standings=
+    *******************************************************************************************************/
+    public void seasonSummary() {
+        System.out.println("Season Summary:");
+        for(raceResults rr : results) {
+            System.out.println(rr);
+        }
         System.out.println("Driver Standings:");
         for (Driver d : getAllDrivers(drivers.size())) {
             System.out.println(d);
         }
 
         System.out.println("\nTeam Standings:");
-        for (Team t : teams.values()) {
+        for (Team t : getSortedTeams()) {
             System.out.println(t);
         }
     }

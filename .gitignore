@@ -1,0 +1,16 @@
+# Compiled Java class files
+*.class
+
+# macOS
+.DS_Store
+
+# Build output
+/out/
+/bin/
+
+# IDE directories
+.idea/
+.vscode/
+
+# JavaFX downloaded SDKs
+/lib/javafx-*/

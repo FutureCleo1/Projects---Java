@@ -8,7 +8,7 @@ public class Driver implements Comparable<Driver>{
     private int points;
     private int wins;
     private int podiums;
-    //Contrustors
+    
     /************************************************************************************
     Name: Driver
     Parameters: String driverid, String driverName, String team, int carNumber, String

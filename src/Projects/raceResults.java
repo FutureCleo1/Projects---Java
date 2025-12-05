@@ -15,7 +15,7 @@ public class raceResults {
     Parameters: String raceId, String raceName, String location, String date, Driver driver, Team team, int position, int pointsEarned
     Purpose: Constructor for Race class
     *******************************************************************************************/
-    public raceResults(String raceName, String location, String date, Driver driver, Team team, int position, int pointsEarned, boolean winner, boolean topPodium) {
+    public raceResults(String raceName, String location, String date, Driver driver, Team team, int position, int pointsEarned) {
         this.raceName = raceName;
         this.location = location;
         this.date = date;
@@ -29,7 +29,7 @@ public class raceResults {
     /*********************************************************************************************
     Name: getRaceName
     Parameters: none
-    Purpose: To get the raceName of the Race object
+    Purpose: To get the raceName of the which is the title of each race
     *******************************************************************************************/
     public String getRaceName() {
         return raceName;
@@ -37,7 +37,7 @@ public class raceResults {
     /*********************************************************************************************
     Name: getLocation
     Parameters: none
-    Purpose: To get the location of the Race object
+    Purpose: To get the location of the Race (what country the race is located in)
     *******************************************************************************************/
     public String getLocation() {
         return location;
@@ -45,7 +45,7 @@ public class raceResults {
     /*********************************************************************************************
     Name: getDate
     Parameters: none
-    Purpose: To get the date of the Race object
+    Purpose: To get the date of when the race is held
     *******************************************************************************************/
     public String getDate() {
         return date;
@@ -53,7 +53,7 @@ public class raceResults {
     /*********************************************************************************************
     Name: getDriver
     Parameters: none
-    Purpose: To get the driver of the Race object
+    Purpose: To get the driver and list the driver
     *******************************************************************************************/
     public Driver getDriver() {
         return driver;
