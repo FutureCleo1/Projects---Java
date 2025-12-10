@@ -1,16 +1,26 @@
-# Compiled Java class files
+# Compiled class files
+bin/
+out/
 *.class
+
+# IDE files
+.vscode/
+.idea/
+*.iml
 
 # macOS
 .DS_Store
 
-# Build output
-/out/
-/bin/
+# Temporary files
+*.tmp
+*.bak
+*~
 
-# IDE directories
-.idea/
-.vscode/
+# Log files
+*.log
 
-# JavaFX downloaded SDKs
-/lib/javafx-*/
+# OS generated files
+Thumbs.db
+
+# JavaFX SDK (too large for GitHub)
+javafx-sdk-*/
