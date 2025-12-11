@@ -72,6 +72,28 @@ public class App extends Application {
     }
 
     private void handleAddRace() {
+        // Create a dialog to choose between manual entry or file upload
+        Alert choiceDialog = new Alert(Alert.AlertType.INFORMATION);
+        choiceDialog.setTitle("Add Race Results");
+        choiceDialog.setHeaderText("Choose how to add race results:");
+        choiceDialog.setContentText("Would you like to:\n1. Enter results manually (one driver at a time)\n2. Import results from a CSV file");
+        
+        ButtonType manualBtn = new ButtonType("Manual Entry");
+        ButtonType fileBtn = new ButtonType("Import from File");
+        ButtonType cancelBtn = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        
+        choiceDialog.getButtonTypes().setAll(manualBtn, fileBtn, cancelBtn);
+        
+        choiceDialog.showAndWait().ifPresent(result -> {
+            if (result == manualBtn) {
+                handleManualRaceEntry();
+            } else if (result == fileBtn) {
+                handleRaceFileImport();
+            }
+        });
+    }
+
+    private void handleManualRaceEntry() {
         TextInputDialog raceDialog = new TextInputDialog("Bahrain Grand Prix");
         raceDialog.setTitle("Add Race Result");
         raceDialog.setHeaderText("Enter race name:");
@@ -113,6 +135,78 @@ public class App extends Application {
 
         seasonManager.addRaceResult(raceName, location, date, driverName, position, points);
         showInfo("Race Added", "Race result added and standings updated.");
+    }
+
+    private void handleRaceFileImport() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Race Results CSV File");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        );
+        
+        File selectedFile = fileChooser.showOpenDialog(null);
+        
+        if (selectedFile != null) {
+            try {
+                int count = importRaceResultsFromFile(selectedFile);
+                showInfo("Success", "Imported " + count + " race results from:\n" + selectedFile.getName());
+            } catch (Exception ex) {
+                showError("Error importing race results", ex.getMessage());
+            }
+        }
+    }
+
+    private int importRaceResultsFromFile(File file) throws Exception {
+        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(file));
+        String line;
+        int count = 0;
+        int errors = 0;
+        
+        // Skip header if present
+        boolean firstLine = true;
+        while ((line = br.readLine()) != null) {
+            if (line.trim().isEmpty() || line.startsWith("#")) continue;
+            
+            // Skip header line
+            if (firstLine && (line.contains("Race") || line.contains("race"))) {
+                firstLine = false;
+                continue;
+            }
+            firstLine = false;
+            
+            String[] parts = line.split(",");
+            if (parts.length < 6) { // Need: raceName, location, date, driverName, position, points
+                errors++;
+                continue;
+            }
+            
+            try {
+                String raceName = parts[0].trim();
+                String location = parts[1].trim();
+                String date = parts[2].trim();
+                String driverName = parts[3].trim();
+                int position = Integer.parseInt(parts[4].trim());
+                int points = Integer.parseInt(parts[5].trim());
+                
+                seasonManager.addRaceResult(raceName, location, date, driverName, position, points);
+                count++;
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid number format in line: " + line);
+                errors++;
+                continue;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("Missing fields in line: " + line);
+                errors++;
+                continue;
+            }
+        }
+        br.close();
+        
+        if (errors > 0) {
+            System.out.println("Imported " + count + " results with " + errors + " errors");
+        }
+        
+        return count;
     }
 
     private void handleShowStandings() {
